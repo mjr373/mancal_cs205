@@ -82,11 +82,37 @@ def valid_moves(board, player):
 
 
 
-def move_pieces():
-    pass
+def move_pieces(pocket, board, player):
+    num_pieces = board[player][pocket]
+    board[player][pocket] = 0
+    next_pocket = pocket
+    for i in range(1, num_pieces+1):
+        if player == 0:
+            next_pocket -= 1
+            if (next_pocket >= 0) or (next_pocket <= -7):
+                next_pocket = abs(next_pocket)
+                if next_pocket == 7:
+                    next_pocket = 6
+                board[player][next_pocket] += 1
+            else:
+                board[1][abs(next_pocket)] += 1
+    # return index of last pocket a piece was dropped in
+    # pair: (player side, pocket)
+    if next_pocket < 0:
+        player_side = 1
+    else:
+        player_side = 0
+    return(player_side, abs(next_pocket))
 
-def is_valid_choice():
-    pass
+
+
+# Determine if move player chose is possible
+def is_valid_choice(pocket, board, player):
+    available_moves = valid_moves(board, player)
+    if pocket in available_moves:
+        return True
+    else:
+        return False
 
 def getXY(posx, posy):
     #GET COLUMN SELECTION
@@ -144,10 +170,18 @@ while len(possible_moves) != 0:
                 col, row = getXY(posx, posy)
 
                 if row == player:
-                    if col in possible_moves:
+                    #if col in possible_moves:
+                    if is_valid_choice(col, board, player):
                         valid_move = True
 
         # Do some stuff (move, ect.)
+
+        # return index of last pocket a piece was dropped in
+        # pair: (player side, pocket)
+        last_pocket_index = move_pieces(col, board, player)
+        print(board)
+        print("\n", last_pocket_index, "\n")
+        pygame.display.update()
                         
 
         # if last_stone == 0: #if the last stone ended up in the store, take another turn (for computer this would be 7 not 0)
