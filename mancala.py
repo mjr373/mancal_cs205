@@ -40,6 +40,10 @@ def create_board():
     board = np.array([[0,4,4,4,4,4,4,0],[0,4,4,4,4,4,4,0]])
     return board
 
+def update_board(new_board):
+    board = new_board
+    return new_board
+
 def draw_board(board):
 
 
@@ -63,12 +67,12 @@ def draw_board(board):
         for r in range(ROWS):
             #Draw the pockets
             pygame.draw.circle(screen,BLACK, (int((c*POCKET)+170),int(r * POCKET+POCKET+25)), pocket_radius)
-            if(not(r == 1 and c+1 ==6)):
+            if(not(r == 1 and c+1 == 6)):
                 textsurface = myfont.render(str(board[r][c+1]), False, BLUE)
                 screen.blit(textsurface, (int((c * POCKET)+170), int(r * POCKET+POCKET+25)))
 
     # Draw last pocket store
-    textsurface = myfont.render(str(board[1][5]), False, BLUE)
+    textsurface = myfont.render(str(board[1][6]), False, BLUE)
     screen.blit(textsurface, (int((5 * POCKET) + 170), int(1 * POCKET + POCKET + 25)))
 
 # valid_moves() returns the indexes of the pits that the player can choose from
@@ -205,6 +209,9 @@ while len(possible_moves) != 0:
         last_pocket_index = move_pieces(col, board, player)
         print(board)
         print("\n", last_pocket_index, "\n")
+
+        board = update_board(board)
+        draw_board(board)
         pygame.display.update()
                         
 
