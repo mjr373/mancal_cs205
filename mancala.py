@@ -215,8 +215,8 @@ while len(possible_moves) != 0:
         pygame.display.update()
                         
 
-        # if last_stone == 0: #if the last stone ended up in the store, take another turn (for computer this would be 7 not 0)
-        #     player += 1
+        if last_pocket_index[0] == 0 and last_pocket_index[1] == 0: #if the last stone ended up in the store, take another turn (for computer this would be 7 not 0)
+            player += 1
                     
         print("player 0 turn over")
         possible_moves = valid_moves(board, player) #update
