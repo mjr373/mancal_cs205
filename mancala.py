@@ -87,21 +87,45 @@ def move_pieces(pocket, board, player):
     board[player][pocket] = 0
     next_pocket = pocket
     for i in range(1, num_pieces+1):
+        # user moves pieces
         if player == 0:
             next_pocket -= 1
+            # pieces dropped on user's side of the board
             if (next_pocket >= 0) or (next_pocket <= -7):
                 next_pocket = abs(next_pocket)
                 if next_pocket == 7:
                     next_pocket = 6
                 board[player][next_pocket] += 1
+            # pieces dropped on computer's side of the board
             else:
                 board[1][abs(next_pocket)] += 1
+
+        # computer moves pieces
+        if player == 1:
+            next_pocket += 1
+            # pieces dropped on computer's side of the board
+            if (next_pocket <= 7) or (next_pocket >= 14):
+                if next_pocket == 14:
+                    next_pocket = 1
+                board[player][next_pocket] += 1
+            # pieces dropped on user's side of the board
+            else:
+                board[0][14-next_pocket] += 1
+        
     # return index of last pocket a piece was dropped in
     # pair: (player side, pocket)
-    if next_pocket < 0:
-        player_side = 1
-    else:
-        player_side = 0
+    if player == 0:
+        if next_pocket < 0:
+            player_side = 1
+        else:
+            player_side = 0
+    if player == 1:
+        if next_pocket > 7:
+            player_side = 0
+            next_pocket = 14-next_pocket
+        else:
+            player_side = 1
+
     return(player_side, abs(next_pocket))
 
 
