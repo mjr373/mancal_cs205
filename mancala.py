@@ -229,7 +229,21 @@ while len(possible_moves) != 0:
     
     pygame.display.update()
 
-# winner = determine_winner(board)  #get the winner
 
+
+def game_over(board):
+    if board[0][1] == board[0][2] == board[0][3] == board[0][4] == board[0][5] == board[0][6] or board[1][1] == board[1][2] == board[1][3] == board[1][4] == board[1][5] == board[1][6]:
+        return True
+
+def determine_winner(board):
+    if board[0][0] > board[1][7]:
+        return "player 0"
+    elif board[0][0] == board[1][7]:
+        return "tie"
+    else:
+        return "player 1"
+
+
+winner = determine_winner(board)  # get the winner
 
 pygame.quit()
