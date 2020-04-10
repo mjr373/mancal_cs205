@@ -4,6 +4,7 @@ import numpy as np
 import pygame
 import pygame.freetype
 import math
+import random
 
 pygame.init()
 
@@ -45,9 +46,6 @@ def update_board(new_board):
     return new_board
 
 def draw_board(board):
-
-
-
     #Draw wooden board
     pygame.draw.rect(screen, WOOD, (50, 40, width+100, int(height/1.5)))
     #Draw the stores
@@ -60,8 +58,6 @@ def draw_board(board):
 
     textsurface = bigfont.render(str(board[1][7]), False, BLUE)
     screen.blit(textsurface, (int((6 * POCKET) + 163), int(130)))
-
-
 
     for c in range(COLUMNS):
         for r in range(ROWS):
@@ -83,7 +79,6 @@ def valid_moves(board, player):
         if board[player][i] != 0:
             moves.append(i)
     return moves
-
 
 
 def move_pieces(pocket, board, player):
@@ -172,11 +167,9 @@ def getXY(posx, posy):
 screen = pygame.display.set_mode(size)
 
 board = create_board()
-
-draw_board(board)
-
-possible_moves = [1, 2, 3, 4, 5, 6] #this is the index of available moves with respect to a given player
 player = 0  #where player 0 is user, player 1 is computer
+possible_moves = valid_moves(board, player) #this is the index of available moves with respect to a given player
+draw_board(board)
 
 while len(possible_moves) != 0:
     pygame.display.update()
@@ -214,15 +207,36 @@ while len(possible_moves) != 0:
         draw_board(board)
         pygame.display.update()
                         
-
-        if last_pocket_index[0] == 0 and last_pocket_index[1] == 0: #if the last stone ended up in the store, take another turn (for computer this would be 7 not 0)
-            player += 1
-                    
-        print("player 0 turn over")
         possible_moves = valid_moves(board, player) #update
+        
+        if last_pocket_index[0] == 0 and last_pocket_index[1] == 0: 
+            print("player 0 goes again \n")
+            player += 1
+        else:          
+            print("player 0 turn over \n")
+        
 
     else: #computer's turn
-        print("player 1 turn over")
+        possible_moves = valid_moves(board, player)
+        move_index = random.randint(0, len(possible_moves) - 1)
+        col = possible_moves[move_index]
+        
+        last_pocket_index = move_pieces(col, board, player)
+        print("player 0 move: ", col)
+        print(board)
+
+        board = update_board(board)
+        draw_board(board)
+        pygame.display.update()
+        
+        possible_moves = valid_moves(board, player)
+        
+        if last_pocket_index[0] == 1 and last_pocket_index[1] == 7: 
+            print("player 0 goes again \n")
+            player += 1
+        else:
+            print("player 1 turn over \n")
+        
 
     player += 1
     player = player % 2
@@ -245,5 +259,6 @@ def determine_winner(board):
 
 
 winner = determine_winner(board)  # get the winner
+print("Winner: ", winner)
 
 pygame.quit()
