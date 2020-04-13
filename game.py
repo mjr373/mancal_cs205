@@ -3,7 +3,6 @@
 import numpy as np
 import pygame
 import pygame.freetype
-import math
 
 pygame.init()
 

@@ -23,18 +23,81 @@ WOOD = (193,154,107)
 BLACK = (0,0,0)
 BLUE = (0,0,255)
 
+
+#Set up images
+start_image = pygame.image.load(r'game.jpg')
+instruction_image = pygame.image.load(r'instructions.jpg')
+
+
 #radius for pocket circles
 pocket_radius = int(POCKET/2-5)
 
 #Size of screen
-size = [width + STORE*2, height]
+size = [width + 200, height]
 
 #Preparing font
 pygame.font.init() # you have to call this at the start,
                    # if you want to use this module.
-myfont = pygame.font.SysFont('Comic Sans MS', 30)
+myfont = pygame.font.SysFont("Britannic Bold", 30)
 
-bigfont = pygame.font.SysFont('Comic Sans MS', 35)
+bigfont = pygame.font.SysFont("Britannic Bold", 35)
+
+
+def instructions_screen():
+    screen.fill(BLACK)
+    screen.blit(instruction_image, (0,0))
+
+    instructions_end = False
+    while(instructions_end == False):
+
+        instructions_label = myfont.render("-The top row and left store represents your side.", 1, (255, 0, 0))
+        instructions_label2 = myfont.render("-When it is your turn, click on a pocket in the top row to move your pieces.", 1, (255, 0, 0))
+        instructions_label3 = myfont.render("-The computer will make its move immediately after your turn.", 1, (255, 0, 0))
+        instructions_label4 = myfont.render("-The game ends when no more moves can be made.", 1, (255, 0, 0))
+        instructions_label5 = myfont.render("-The player with more pieces on their side at the end wins!", 1, (255, 0, 0))
+
+        back = myfont.render(" - B A C K - ", 1, (255, 0, 0))
+
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                posx = event.pos[0]
+                posy = event.pos[1]
+                if (posx >= 275 and posx <= 365 and posy >= 275 and posy <= 296):
+                    instructions_end = True
+
+        screen.blit(instructions_label, (0, 110))
+        screen.blit(instructions_label2, (0, 140))
+        screen.blit(instructions_label3, (0, 170))
+        screen.blit(instructions_label4, (0, 200))
+        screen.blit(instructions_label5, (0, 230))
+        screen.blit(back, ((width)/2, 275))
+        pygame.display.flip()
+
+
+def start_screen():
+    black = (0, 0, 0)
+    game_start = False
+    while (game_start == False):
+        screen.fill(black)
+        myfont = pygame.font.SysFont("Britannic Bold", 40)
+        game_label = myfont.render("- Start Game", 1, (255, 0, 0))
+        instructions_label = myfont.render("- Instructions", 1, (255, 0, 0))
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                posx = event.pos[0]
+                posy = event.pos[1]
+
+                print(posx, "posx")
+                print(posy, "posy")
+                if(posx >= 200 and posx <=370 and posy >= 150 and posy <= 173):
+                    game_start = True
+                elif(posx >= 200 and posx <=390 and posy >= 200 and posy <= 223):
+                    instructions_screen()
+
+        screen.blit(start_image,(0,0))
+        screen.blit(game_label, (200, 150))
+        screen.blit(instructions_label, (200, 200))
+        pygame.display.flip()
 
 
 def create_board():
@@ -46,6 +109,7 @@ def update_board(new_board):
     return new_board
 
 def draw_board(board):
+    screen.fill(BLACK)
     #Draw wooden board
     pygame.draw.rect(screen, WOOD, (50, 40, width+100, int(height/1.5)))
     #Draw the stores
@@ -152,13 +216,15 @@ def getXY(posx, posy):
     elif posx >= 510 and posx <= 580:
         col = 6
     else:
-        col = 0
+        col = 10000
 
     #GET ROW SELECTION
     if(posy >= 70 and posy <= 130):
         row = 0
     elif(posy >= 140 and posy <= 210):
         row = 1
+    else:
+        row = 100000
         
     return col, row
 
@@ -169,13 +235,18 @@ screen = pygame.display.set_mode(size)
 board = create_board()
 player = 0  #where player 0 is user, player 1 is computer
 possible_moves = valid_moves(board, player) #this is the index of available moves with respect to a given player
+
+#Start screen is called before board is drawn
+start_screen()
 draw_board(board)
+
+
 
 while len(possible_moves) != 0:
     pygame.display.update()
     if player == 0: # human player's turn
         possible_moves = valid_moves(board, player) #check at beginning of turn
-        
+
         #get user input
         valid_move = False
         while valid_move == False:
@@ -184,10 +255,10 @@ while len(possible_moves) != 0:
                 pygame.quit()
                 quit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-    
+
                 posx = event.pos[0]
                 posy = event.pos[1]
-                
+
                 col, row = getXY(posx, posy)
 
                 if row == player:
@@ -206,21 +277,21 @@ while len(possible_moves) != 0:
         board = update_board(board)
         draw_board(board)
         pygame.display.update()
-                        
+
         possible_moves = valid_moves(board, player) #update
-        
-        if last_pocket_index[0] == 0 and last_pocket_index[1] == 0: 
+
+        if last_pocket_index[0] == 0 and last_pocket_index[1] == 0:
             print("player 0 goes again \n")
             player += 1
-        else:          
+        else:
             print("player 0 turn over \n")
-        
+
 
     else: #computer's turn
         possible_moves = valid_moves(board, player)
         move_index = random.randint(0, len(possible_moves) - 1)
         col = possible_moves[move_index]
-        
+
         last_pocket_index = move_pieces(col, board, player)
         print("player 0 move: ", col)
         print(board)
@@ -228,19 +299,19 @@ while len(possible_moves) != 0:
         board = update_board(board)
         draw_board(board)
         pygame.display.update()
-        
+
         possible_moves = valid_moves(board, player)
-        
-        if last_pocket_index[0] == 1 and last_pocket_index[1] == 7: 
+
+        if last_pocket_index[0] == 1 and last_pocket_index[1] == 7:
             print("player 0 goes again \n")
             player += 1
         else:
             print("player 1 turn over \n")
-        
+
 
     player += 1
     player = player % 2
-    
+
     pygame.display.update()
 
 
