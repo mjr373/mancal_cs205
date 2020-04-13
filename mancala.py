@@ -23,6 +23,7 @@ WOOD = (193,154,107)
 BLACK = (0,0,0)
 BLUE = (0,0,255)
 
+print(pygame.font.get_fonts())
 
 #Set up images
 start_image = pygame.image.load(r'game.jpg')
@@ -42,6 +43,7 @@ myfont = pygame.font.SysFont("Britannic Bold", 30)
 
 bigfont = pygame.font.SysFont("Britannic Bold", 35)
 
+newfont = pygame.font.SysFont("arialnarrowboldttf", 20)
 
 def instructions_screen():
     screen.fill(BLACK)
@@ -50,27 +52,40 @@ def instructions_screen():
     instructions_end = False
     while(instructions_end == False):
 
-        instructions_label = myfont.render("-The top row and left store represents your side.", 1, (255, 0, 0))
-        instructions_label2 = myfont.render("-When it is your turn, click on a pocket in the top row to move your pieces.", 1, (255, 0, 0))
-        instructions_label3 = myfont.render("-The computer will make its move immediately after your turn.", 1, (255, 0, 0))
-        instructions_label4 = myfont.render("-The game ends when no more moves can be made.", 1, (255, 0, 0))
-        instructions_label5 = myfont.render("-The player with more pieces on their side at the end wins!", 1, (255, 0, 0))
+        instructions_label = newfont.render("-The top row and left store represents your side.", 1, (255, 0, 0))
+        instructions_label2 = newfont.render("-When it is your turn, click on a pocket in the top row to move your pieces.", 1, (255, 0, 0))
+
+        instructions_label6 = newfont.render("-If your last piece lands in your store, you take another turn", 1, (255, 0, 0))
+        instructions_label7 = newfont.render("-If your last piece lands on an empty pocket on your side", 1, (255, 0, 0))
+        instructions_label7_2 = newfont.render(" that piece and all adjacent pieces go to your store.", 1, (255, 0, 0))
+
+        instructions_label3 = newfont.render("-The computer will make its move immediately after your turn.", 1, (255, 0, 0))
+        instructions_label4 = newfont.render("-The game ends when no more moves can be made.", 1, (255, 0, 0))
+        instructions_label5 = newfont.render("-The player with more pieces on their side at the end wins!", 1, (255, 0, 0))
+
+
 
         back = myfont.render(" - B A C K - ", 1, (255, 0, 0))
 
         for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 posx = event.pos[0]
                 posy = event.pos[1]
                 if (posx >= 275 and posx <= 365 and posy >= 275 and posy <= 296):
                     instructions_end = True
 
-        screen.blit(instructions_label, (0, 110))
-        screen.blit(instructions_label2, (0, 140))
-        screen.blit(instructions_label3, (0, 170))
-        screen.blit(instructions_label4, (0, 200))
-        screen.blit(instructions_label5, (0, 230))
-        screen.blit(back, ((width)/2, 275))
+        screen.blit(instructions_label, (0, 85))
+        screen.blit(instructions_label2, (0, 110))
+        screen.blit(instructions_label6, (0,135))
+        screen.blit(instructions_label7, (0, 160))
+        screen.blit(instructions_label7_2, (0, 175))
+        screen.blit(instructions_label3, (0, 200))
+        screen.blit(instructions_label4, (0, 225))
+        screen.blit(instructions_label5, (0, 250))
+        screen.blit(back, ((width)/2, 280))
         pygame.display.flip()
 
 
@@ -83,6 +98,9 @@ def start_screen():
         game_label = myfont.render("- Start Game", 1, (255, 0, 0))
         instructions_label = myfont.render("- Instructions", 1, (255, 0, 0))
         for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 posx = event.pos[0]
                 posy = event.pos[1]
