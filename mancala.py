@@ -5,6 +5,7 @@ import pygame
 import pygame.freetype
 import math
 import random
+import time
 
 pygame.init()
 
@@ -246,7 +247,14 @@ def getXY(posx, posy):
         
     return col, row
 
-
+#moves all stones to the appropriate stores
+def tabulate_score(board):
+    store_0 = sum(board[0])
+    store_1 = sum(board[1])
+    board = np.array([[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0]])
+    board[0][0] = store_0
+    board[1][7] = store_1
+    return board
 
 screen = pygame.display.set_mode(size)
 
@@ -347,7 +355,14 @@ def determine_winner(board):
         return "player 1"
 
 
+board = tabulate_score(board)
+draw_board(board)
+pygame.display.update()
+print(board)
+
 winner = determine_winner(board)  # get the winner
 print("Winner: ", winner)
+
+time.sleep(5)
 
 pygame.quit()
