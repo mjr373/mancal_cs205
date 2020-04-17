@@ -125,7 +125,7 @@ def create_board():
 
 def update_board(new_board):
     board = new_board
-    return new_board
+    return board
 
 def draw_board(board):
     screen.fill(BLACK)
