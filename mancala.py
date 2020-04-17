@@ -269,6 +269,8 @@ draw_board(board)
 
 
 while len(possible_moves) != 0:
+    board = update_board(board)
+    draw_board(board)
     pygame.display.update()
     if player == 0: # human player's turn
         possible_moves = valid_moves(board, player) #check at beginning of turn
@@ -337,7 +339,9 @@ while len(possible_moves) != 0:
 
     player += 1
     player = player % 2
-
+    
+    board = update_board(board)
+    draw_board(board)
     pygame.display.update()
 
 
