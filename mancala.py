@@ -119,13 +119,14 @@ def start_screen():
         pygame.display.flip()
 
 
+
 def create_board():
     board = np.array([[0,4,4,4,4,4,4,0],[0,4,4,4,4,4,4,0]])
     return board
 
 def update_board(new_board):
     board = new_board
-    return new_board
+    return board
 
 def draw_board(board):
     screen.fill(BLACK)
@@ -352,11 +353,12 @@ def game_over(board):
 
 def determine_winner(board):
     if board[0][0] > board[1][7]:
-        return "player 0"
+        return "You win!"
     elif board[0][0] == board[1][7]:
-        return "tie"
+        return "Tie Game :/"
     else:
-        return "player 1"
+        return "The computer wins :("
+
 
 
 board = tabulate_score(board)
@@ -364,9 +366,34 @@ draw_board(board)
 pygame.display.update()
 print(board)
 
-winner = determine_winner(board)  # get the winner
-print("Winner: ", winner)
 
-time.sleep(5)
 
-pygame.quit()
+def end_screen():
+    winner = determine_winner(board)
+    your_score = board[0][0]
+    comp_score = board[1][7]
+
+    your_sentence = f"You scored {your_score} points!"
+
+    computer_sentence = f"The computer scored {comp_score}  points!"
+    black = (0, 0, 0)
+    game_start = False
+    while (game_start == False):
+        screen.fill(black)
+        #myfont = pygame.font.SysFont("Britannic Bold", 40)
+        user_info = myfont.render((your_sentence), 1, (255, 0, 0))
+        computer_info = myfont.render((computer_sentence), 1, (255, 0, 0))
+        winner = myfont.render(determine_winner(board), 1, (255, 0, 0))
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+
+
+        screen.blit(start_image, (0, 0))
+        screen.blit(user_info, (175, 125))
+        screen.blit(computer_info, (175, 155))
+        screen.blit(winner, (175, 200))
+        pygame.display.flip()
+
+end_screen()
+
