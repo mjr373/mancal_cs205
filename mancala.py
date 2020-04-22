@@ -257,6 +257,62 @@ def tabulate_score(board):
     board[1][7] = store_1
     return board
 
+def game_over(board):
+    if board[0][1] == board[0][2] == board[0][3] == board[0][4] == board[0][5] == board[0][6] or board[1][1] == board[1][2] == board[1][3] == board[1][4] == board[1][5] == board[1][6]:
+        return True
+
+
+def determine_winner(board):
+    if board[0][0] > board[1][7]:
+        return "You win!"
+    elif board[0][0] == board[1][7]:
+        return "Tie Game :/"
+    else:
+        return "The computer wins :("
+    
+
+
+def end_screen():
+    winner = determine_winner(board)
+    your_score = board[0][0]
+    comp_score = board[1][7]
+
+    your_sentence = f"You scored {your_score} points!"
+
+    computer_sentence = f"The computer scored {comp_score}  points!"
+    black = (0, 0, 0)
+    game_start = False
+    while (game_start == False):
+        screen.fill(black)
+        #myfont = pygame.font.SysFont("Britannic Bold", 40)
+        user_info = myfont.render((your_sentence), 1, (255, 0, 0))
+        computer_info = myfont.render((computer_sentence), 1, (255, 0, 0))
+        winner = myfont.render(determine_winner(board), 1, (255, 0, 0))
+        again_label = myfont.render("- Play Again", 1, (255, 0, 0))
+        quit_label = myfont.render("- Quit Game", 1, (255, 0, 0))
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                posx = event.pos[0]
+                posy = event.pos[1]
+
+                print(posx, "posx")
+                print(posy, "posy")
+                if 100 <= posx <= 220 and 233 <= posy <= 250:
+                    game_start = True
+                elif 300 <= posx <= 425 and 235 <= posy <= 250:
+                    quit()
+
+        screen.blit(start_image, (0, 0))
+        screen.blit(user_info, (175, 125))
+        screen.blit(computer_info, (175, 155))
+        screen.blit(winner, (175, 200))
+        screen.blit(again_label, (100, 230))
+        screen.blit(quit_label, (300, 230))
+        pygame.display.flip()
+
 screen = pygame.display.set_mode(size)
 
 board = create_board()
@@ -361,18 +417,7 @@ while len(possible_moves) != 0:
     pygame.display.update()
 
 
-def game_over(board):
-    if board[0][1] == board[0][2] == board[0][3] == board[0][4] == board[0][5] == board[0][6] or board[1][1] == board[1][2] == board[1][3] == board[1][4] == board[1][5] == board[1][6]:
-        return True
 
-
-def determine_winner(board):
-    if board[0][0] > board[1][7]:
-        return "You win!"
-    elif board[0][0] == board[1][7]:
-        return "Tie Game :/"
-    else:
-        return "The computer wins :("
 
 
 board = tabulate_score(board)
@@ -388,47 +433,6 @@ print(board)
 # while play_again:
 #     start_screen()
 
-
-def end_screen():
-    winner = determine_winner(board)
-    your_score = board[0][0]
-    comp_score = board[1][7]
-
-    your_sentence = f"You scored {your_score} points!"
-
-    computer_sentence = f"The computer scored {comp_score}  points!"
-    black = (0, 0, 0)
-    game_start = False
-    while (game_start == False):
-        screen.fill(black)
-        #myfont = pygame.font.SysFont("Britannic Bold", 40)
-        user_info = myfont.render((your_sentence), 1, (255, 0, 0))
-        computer_info = myfont.render((computer_sentence), 1, (255, 0, 0))
-        winner = myfont.render(determine_winner(board), 1, (255, 0, 0))
-        again_label = myfont.render("- Play Again", 1, (255, 0, 0))
-        quit_label = myfont.render("- Quit Game", 1, (255, 0, 0))
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                quit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                posx = event.pos[0]
-                posy = event.pos[1]
-
-                print(posx, "posx")
-                print(posy, "posy")
-                if 100 <= posx <= 220 and 233 <= posy <= 250:
-                    game_start = True
-                elif 300 <= posx <= 425 and 235 <= posy <= 250:
-                    quit()
-
-        screen.blit(start_image, (0, 0))
-        screen.blit(user_info, (175, 125))
-        screen.blit(computer_info, (175, 155))
-        screen.blit(winner, (175, 200))
-        screen.blit(again_label, (100, 230))
-        screen.blit(quit_label, (300, 230))
-        pygame.display.flip()
 
 
 end_screen()
