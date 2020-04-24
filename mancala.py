@@ -376,13 +376,17 @@ while play_again:
             draw_board(board)
             pygame.display.update()
             
-            possible_moves = valid_moves(board, player)  # update
 
             if last_pocket_index[0] == 0 and last_pocket_index[1] == 0:
+                possible_moves = valid_moves(board, player)
                 print("player 0 goes again \n")
                 player += 1
             else:
+                possible_moves = valid_moves(board, 1)
                 print("player 0 turn over \n")
+                
+                if len(valid_moves(board, 0)) == 0:    #your side is empty
+                    break
 
         else:  # computer's turn
             possible_moves = valid_moves(board, player)
@@ -407,13 +411,18 @@ while play_again:
             draw_board(board)
             pygame.display.update()
             
-            possible_moves = valid_moves(board, player)
-
+            
             if last_pocket_index[0] == 1 and last_pocket_index[1] == 7:
+                possible_moves = valid_moves(board, player)
                 print("player 1 goes again \n")
                 player += 1
             else:
+                possible_moves = valid_moves(board, 0)
                 print("player 1 turn over \n")
+                
+                if len(valid_moves(board, 1)) == 0:    #the computer's side is empty
+                    break
+                
 
         player += 1
         player = player % 2
