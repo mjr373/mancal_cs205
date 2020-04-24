@@ -46,6 +46,7 @@ bigfont = pygame.font.SysFont("Britannic Bold", 35)
 
 newfont = pygame.font.SysFont("arialnarrowboldttf", 20)
 
+
 def instructions_screen():
     screen.fill(BLACK)
     screen.blit(instruction_image, (0,0))
@@ -119,14 +120,15 @@ def start_screen():
         pygame.display.flip()
 
 
-
 def create_board():
     board = np.array([[0,4,4,4,4,4,4,0],[0,4,4,4,4,4,4,0]])
     return board
 
+
 def update_board(new_board):
     board = new_board
     return board
+
 
 def draw_board(board):
     screen.fill(BLACK)
@@ -154,6 +156,7 @@ def draw_board(board):
     # Draw last pocket store
     textsurface = myfont.render(str(board[1][6]), False, BLUE)
     screen.blit(textsurface, (int((5 * POCKET) + 170), int(1 * POCKET + POCKET + 25)))
+
 
 # valid_moves() returns the indexes of the pits that the player can choose from
 # (i.e. the pits on their side that are not empty).
@@ -212,7 +215,6 @@ def move_pieces(pocket, board, player):
     return(player_side, abs(next_pocket))
 
 
-
 # Determine if move player chose is possible
 def is_valid_choice(pocket, board, player):
     available_moves = valid_moves(board, player)
@@ -220,6 +222,7 @@ def is_valid_choice(pocket, board, player):
         return True
     else:
         return False
+
 
 def getXY(posx, posy):
     #GET COLUMN SELECTION
@@ -248,6 +251,7 @@ def getXY(posx, posy):
         
     return col, row
 
+
 #moves all stones to the appropriate stores
 def tabulate_score(board):
     store_0 = sum(board[0])
@@ -256,6 +260,7 @@ def tabulate_score(board):
     board[0][0] = store_0
     board[1][7] = store_1
     return board
+
 
 def game_over(board):
     if board[0][1] == board[0][2] == board[0][3] == board[0][4] == board[0][5] == board[0][6] or board[1][1] == board[1][2] == board[1][3] == board[1][4] == board[1][5] == board[1][6]:
@@ -270,7 +275,6 @@ def determine_winner(board):
     else:
         return "The computer wins :("
     
-
 
 def end_screen():
     winner = determine_winner(board)
@@ -290,6 +294,7 @@ def end_screen():
         winner = myfont.render(determine_winner(board), 1, (255, 0, 0))
         again_label = myfont.render("- Play Again", 1, (255, 0, 0))
         quit_label = myfont.render("- Quit Game", 1, (255, 0, 0))
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -301,7 +306,7 @@ def end_screen():
                 print(posx, "posx")
                 print(posy, "posy")
                 if 100 <= posx <= 220 and 233 <= posy <= 250:
-                    game_start = True
+                    return True
                 elif 300 <= posx <= 425 and 235 <= posy <= 250:
                     quit()
 
@@ -313,126 +318,112 @@ def end_screen():
         screen.blit(quit_label, (300, 230))
         pygame.display.flip()
 
-screen = pygame.display.set_mode(size)
 
-board = create_board()
-player = 0  #where player 0 is user, player 1 is computer
-possible_moves = valid_moves(board, player) #this is the index of available moves with respect to a given player
+play_again = True
+while play_again:
+    screen = pygame.display.set_mode(size)
 
-#Start screen is called before board is drawn
-start_screen()
-draw_board(board)
+    board = create_board()
+    player = 0  #where player 0 is user, player 1 is computer
+    possible_moves = valid_moves(board, player) #this is the index of available moves with respect to a given player
 
-
-
-while len(possible_moves) != 0:
-    board = update_board(board)
+    #Start screen is called before board is drawn
+    start_screen()
     draw_board(board)
-    pygame.display.update()
-    if player == 0: # human player's turn
-        possible_moves = valid_moves(board, player) #check at beginning of turn
+    while len(possible_moves) != 0:
+        board = update_board(board)
+        draw_board(board)
+        pygame.display.update()
+        if player == 0:  # human player's turn
+            possible_moves = valid_moves(board, player)  # check at beginning of turn
 
-        #get user input
-        valid_move = False
-        while valid_move == False:
-            event = pygame.event.wait()  #wait for user event
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                quit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            # get user input
+            valid_move = False
+            while not valid_move:
+                event = pygame.event.wait()  # wait for user event
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+                if event.type == pygame.MOUSEBUTTONDOWN:
 
-                posx = event.pos[0]
-                posy = event.pos[1]
+                    posx = event.pos[0]
+                    posy = event.pos[1]
 
-                col, row = getXY(posx, posy)
+                    col, row = getXY(posx, posy)
 
-                if row == player:
-                    #if col in possible_moves:
-                    if is_valid_choice(col, board, player):
-                        valid_move = True
+                    if row == player:
+                        # if col in possible_moves:
+                        if is_valid_choice(col, board, player):
+                            valid_move = True
 
-        # Do some stuff (move, ect.)
+            # Do some stuff (move, ect.)
 
-        # return index of last pocket a piece was dropped in
-        # pair: (player side, pocket)
-        last_pocket_index = move_pieces(col, board, player)
-        print(board)
-        print("\n", last_pocket_index, "\n")
+            # return index of last pocket a piece was dropped in
+            # pair: (player side, pocket)
+            last_pocket_index = move_pieces(col, board, player)
+            print(board)
+            print("\n", last_pocket_index, "\n")
+
+            board = update_board(board)
+            draw_board(board)
+            pygame.display.update()
+
+            # if stone lands in empty pocket on user side
+            if (last_pocket_index[0] == 0) and (last_pocket_index[1] not in possible_moves):
+                if board[0][last_pocket_index[1]] == 1:
+                    board[0][0] += board[1][last_pocket_index[1]]
+                    board[0][0] += board[0][last_pocket_index[1]]
+                    board[1][last_pocket_index[1]] = 0
+                    board[0][last_pocket_index[1]] = 0
+
+            possible_moves = valid_moves(board, player)  # update
+
+            if last_pocket_index[0] == 0 and last_pocket_index[1] == 0:
+                print("player 0 goes again \n")
+                player += 1
+            else:
+                print("player 0 turn over \n")
+
+        else:  # computer's turn
+            possible_moves = valid_moves(board, player)
+            move_index = random.randint(0, len(possible_moves) - 1)
+            col = possible_moves[move_index]
+
+            last_pocket_index = move_pieces(col, board, player)
+            print("player 1 move: ", col)
+            print(board)
+
+            board = update_board(board)
+            draw_board(board)
+            pygame.display.update()
+
+            # if stone lands in empty pocket on computer side
+            if (last_pocket_index[0] == 1) and (last_pocket_index[1] not in possible_moves):
+                if board[1][last_pocket_index[1]] == 1:
+                    board[1][7] += board[1][last_pocket_index[1]]
+                    board[1][7] += board[0][last_pocket_index[1]]
+                    board[1][last_pocket_index[1]] = 0
+                    board[0][last_pocket_index[1]] = 0
+
+            possible_moves = valid_moves(board, player)
+
+            if last_pocket_index[0] == 1 and last_pocket_index[1] == 7:
+                print("player 1 goes again \n")
+                player += 1
+            else:
+                print("player 1 turn over \n")
+
+        player += 1
+        player = player % 2
 
         board = update_board(board)
         draw_board(board)
         pygame.display.update()
 
-        # if stone lands in empty pocket on user side
-        if (last_pocket_index[0] == 0) and (last_pocket_index[1] not in possible_moves):
-            if board[0][last_pocket_index[1]] == 1:
-                board[0][0] += board[1][last_pocket_index[1]]
-                board[0][0] += board[0][last_pocket_index[1]]
-                board[1][last_pocket_index[1]] = 0
-                board[0][last_pocket_index[1]] = 0
-
-        possible_moves = valid_moves(board, player) #update
-
-        if last_pocket_index[0] == 0 and last_pocket_index[1] == 0:
-            print("player 0 goes again \n")
-            player += 1
-        else:
-            print("player 0 turn over \n")
-
-
-    else: #computer's turn
-        possible_moves = valid_moves(board, player)
-        move_index = random.randint(0, len(possible_moves) - 1)
-        col = possible_moves[move_index]
-
-        last_pocket_index = move_pieces(col, board, player)
-        print("player 1 move: ", col)
-        print(board)
-
-        board = update_board(board)
-        draw_board(board)
-        pygame.display.update()
-
-        # if stone lands in empty pocket on computer side
-        if (last_pocket_index[0] == 1) and (last_pocket_index[1] not in possible_moves):
-            if board[1][last_pocket_index[1]] == 1:
-                board[1][7] += board[1][last_pocket_index[1]]
-                board[1][7] += board[0][last_pocket_index[1]]
-                board[1][last_pocket_index[1]] = 0
-                board[0][last_pocket_index[1]] = 0
-
-        possible_moves = valid_moves(board, player)
-
-        if last_pocket_index[0] == 1 and last_pocket_index[1] == 7:
-            print("player 1 goes again \n")
-            player += 1
-        else:
-            print("player 1 turn over \n")
-
-    player += 1
-    player = player % 2
-    
-    board = update_board(board)
+    board = tabulate_score(board)
     draw_board(board)
     pygame.display.update()
+    print(board)
 
+    play_again = end_screen()
 
-
-
-
-board = tabulate_score(board)
-draw_board(board)
-pygame.display.update()
-print(board)
-
-
-# def play_again():
-#     play_again = True
-#
-#
-# while play_again:
-#     start_screen()
-
-
-
-end_screen()
