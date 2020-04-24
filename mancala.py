@@ -356,17 +356,10 @@ while play_again:
                         if is_valid_choice(col, board, player):
                             valid_move = True
 
-            # Do some stuff (move, ect.)
-
             # return index of last pocket a piece was dropped in
             # pair: (player side, pocket)
             last_pocket_index = move_pieces(col, board, player)
-            print(board)
-            print("\n", last_pocket_index, "\n")
-
-            board = update_board(board)
-            draw_board(board)
-            pygame.display.update()
+            
 
             # if stone lands in empty pocket on user side
             if (last_pocket_index[0] == 0) and (last_pocket_index[1] not in possible_moves):
@@ -376,6 +369,13 @@ while play_again:
                     board[1][last_pocket_index[1]] = 0
                     board[0][last_pocket_index[1]] = 0
 
+            print("player 0 move: ", col)
+            print(board)
+
+            board = update_board(board)
+            draw_board(board)
+            pygame.display.update()
+            
             possible_moves = valid_moves(board, player)  # update
 
             if last_pocket_index[0] == 0 and last_pocket_index[1] == 0:
@@ -390,12 +390,7 @@ while play_again:
             col = possible_moves[move_index]
 
             last_pocket_index = move_pieces(col, board, player)
-            print("player 1 move: ", col)
-            print(board)
-
-            board = update_board(board)
-            draw_board(board)
-            pygame.display.update()
+            
 
             # if stone lands in empty pocket on computer side
             if (last_pocket_index[0] == 1) and (last_pocket_index[1] not in possible_moves):
@@ -405,6 +400,13 @@ while play_again:
                     board[1][last_pocket_index[1]] = 0
                     board[0][last_pocket_index[1]] = 0
 
+            print("player 1 move: ", col)
+            print(board)
+
+            board = update_board(board)
+            draw_board(board)
+            pygame.display.update()
+            
             possible_moves = valid_moves(board, player)
 
             if last_pocket_index[0] == 1 and last_pocket_index[1] == 7:
