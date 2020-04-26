@@ -356,6 +356,10 @@ while play_again:
                         if is_valid_choice(col, board, player):
                             valid_move = True
 
+            board = update_board(board)
+            draw_board(board)
+            pygame.display.update()
+
             # return index of last pocket a piece was dropped in
             # pair: (player side, pocket)
             last_pocket_index = move_pieces(col, board, player)
@@ -368,6 +372,9 @@ while play_again:
                     board[0][0] += board[0][last_pocket_index[1]]
                     board[1][last_pocket_index[1]] = 0
                     board[0][last_pocket_index[1]] = 0
+                    board = update_board(board)
+                    draw_board(board)
+                    pygame.display.update()
 
             print("player 0 move: ", col)
             print(board)
@@ -393,6 +400,10 @@ while play_again:
             move_index = random.randint(0, len(possible_moves) - 1)
             col = possible_moves[move_index]
 
+            board = update_board(board)
+            draw_board(board)
+            pygame.display.update()
+
             last_pocket_index = move_pieces(col, board, player)
             
 
@@ -403,6 +414,9 @@ while play_again:
                     board[1][7] += board[0][last_pocket_index[1]]
                     board[1][last_pocket_index[1]] = 0
                     board[0][last_pocket_index[1]] = 0
+                    board = update_board(board)
+                    draw_board(board)
+                    pygame.display.update()
 
             print("player 1 move: ", col)
             print(board)
