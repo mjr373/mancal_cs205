@@ -385,6 +385,8 @@ while play_again:
             
 
             if last_pocket_index[0] == 0 and last_pocket_index[1] == 0:
+                if board[0][0] == 0:
+                    board[0][0] += 1
                 possible_moves = valid_moves(board, player)
                 print("player 0 goes again \n")
                 player += 1
@@ -427,6 +429,8 @@ while play_again:
             
             
             if last_pocket_index[0] == 1 and last_pocket_index[1] == 7:
+                if board[1][7] == 0:
+                    board[1][7] += 1
                 possible_moves = valid_moves(board, player)
                 print("player 1 goes again \n")
                 player += 1
