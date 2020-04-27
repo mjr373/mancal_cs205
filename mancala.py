@@ -389,7 +389,11 @@ while play_again:
                     board[0][0] += 1
                 possible_moves = valid_moves(board, player)
                 print("player 0 goes again \n")
+                print(board)
                 player += 1
+                board = update_board(board)
+                draw_board(board)
+                pygame.display.update()
             else:
                 possible_moves = valid_moves(board, 1)
                 print("player 0 turn over \n")
