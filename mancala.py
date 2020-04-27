@@ -440,9 +440,9 @@ while play_again:
             if last_pocket_index[0] == 1 and last_pocket_index[1] == 7:
                 if board[1][7] == 0:
                     board[1][7] += 1
+                    board = update_board(board)
                     draw_board(board)
                     pygame.display.update()
-                    possible_moves = valid_moves(board, player)
                 possible_moves = valid_moves(board, player)
                 print("player 1 goes again \n")
                 player += 1
@@ -453,9 +453,9 @@ while play_again:
                 if len(valid_moves(board, 1)) == 0:    #the computer's side is empty
                     break
 
+            board = update_board(board)
             draw_board(board)
             pygame.display.update()
-            possible_moves = valid_moves(board, player)
                 
 
         player += 1
