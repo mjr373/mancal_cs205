@@ -58,8 +58,8 @@ def instructions_screen():
         instructions_label2 = newfont.render("-When it is your turn, click on a pocket in the top row to move your pieces.", 1, (255, 0, 0))
 
         instructions_label6 = newfont.render("-If your last piece lands in your store, you take another turn", 1, (255, 0, 0))
-        instructions_label7 = newfont.render("-If your last piece lands on an empty pocket on your side", 1, (255, 0, 0))
-        instructions_label7_2 = newfont.render(" that piece and all adjacent pieces go to your store.", 1, (255, 0, 0))
+        instructions_label7 = newfont.render("-If your last piece lands on an empty pocket on your side, and the pocket adjacent is", 1, (255, 0, 0))
+        instructions_label7_2 = newfont.render(" not empty, that piece and all adjacent pieces go to your store.", 1, (255, 0, 0))
 
         instructions_label3 = newfont.render("-The computer will make its move immediately after your turn.", 1, (255, 0, 0))
         instructions_label4 = newfont.render("-The game ends when no more moves can be made.", 1, (255, 0, 0))
