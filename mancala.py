@@ -367,7 +367,7 @@ while play_again:
 
             # if stone lands in empty pocket on user side
             if (last_pocket_index[0] == 0) and (last_pocket_index[1] not in possible_moves):
-                if board[0][last_pocket_index[1]] == 1:
+                if board[0][last_pocket_index[1]] == 1 and board[1][last_pocket_index[1]] != 0:
                     board[0][0] += board[1][last_pocket_index[1]]
                     board[0][0] += board[0][last_pocket_index[1]]
                     board[1][last_pocket_index[1]] = 0
@@ -420,7 +420,7 @@ while play_again:
 
             # if stone lands in empty pocket on computer side
             if (last_pocket_index[0] == 1) and (last_pocket_index[1] not in possible_moves):
-                if board[1][last_pocket_index[1]] == 1:
+                if board[1][last_pocket_index[1]] == 1 and board[0][last_pocket_index[1]] != 0:
                     board[1][7] += board[1][last_pocket_index[1]]
                     board[1][7] += board[0][last_pocket_index[1]]
                     board[1][last_pocket_index[1]] = 0
